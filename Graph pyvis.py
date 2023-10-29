@@ -19,7 +19,7 @@ nx_graph = nx.MultiGraph()
 
 for i in range(1,11):
     nx_graph.add_node(i, label=str(i))
-
+"""
 nx_graph.add_edges_from([(1,2,{'weight': 1}),
                          (2,3,{'weight': 2}),
                          (3,4,{'weight': 3}),
@@ -28,6 +28,15 @@ nx_graph.add_edges_from([(1,2,{'weight': 1}),
                          (4,5,{'weight': 5}),
                          (5,6,{'weight': 6}),
                          (4,6,{'weight': 7})])
+"""
+nx_graph.add_edges_from([(1,2,{'weight': 1}),
+                         (2,3,{'weight': 2}),
+                         (2,4,{'weight': 3}),
+                         (2,5,{'weight': 1}),
+                         (3,4,{'weight': 3}),
+                         (5,4,{'weight': 1}),
+                         (4,6,{'weight': 4})])
+
 
 pyvis_graph.add_node(1, label="1")
 pyvis_graph.add_node(2, label="2")
