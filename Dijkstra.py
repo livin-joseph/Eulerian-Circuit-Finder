@@ -18,7 +18,7 @@ def dijkstra(graph, source, dest):
     selected = [source]
     l = len(graph)
     #Base case from source
-    inf = 10000000
+    inf = float('inf')
     min_sel = inf
     for i in range(l):
         if(i==source):
@@ -33,7 +33,7 @@ def dijkstra(graph, source, dest):
                     ind = i
                 
     if(source==dest):
-        return 0
+        return 0, [source]
     # dijkstra's in Play
     selected.append(ind) 
     while(ind!=dest):
@@ -44,7 +44,7 @@ def dijkstra(graph, source, dest):
                     #Check if distance needs to be updated
                     if((graph[ind][i] + min_sel) < shortest[i]):
                         shortest[i] = graph[ind][i] + min_sel
-        temp_min = 1000000
+        temp_min = float('inf')
         #print('shortest:',shortest)
         #print('selected:',selected)
         
@@ -55,8 +55,16 @@ def dijkstra(graph, source, dest):
                     ind = j
         min_sel = temp_min
         selected.append(ind)
+        
+    path = [dest]
+    while path[-1] != source:
+        current_node = path[-1]
+        for i in range(l):
+            if graph[current_node][i] != 0 and shortest[current_node] - graph[current_node][i] == shortest[i]:
+                path.append(i)
+                break
     
-    return shortest[dest]
+    return shortest[dest], path[::-1]
                             
 #Finding odd degree vertices in graph
 
@@ -124,7 +132,8 @@ def Chinese_Postman(graph):
     for i in pairings_sum:
         s = 0
         for j in range(len(i)):
-            s += dijkstra(graph, i[j][0], i[j][1])
+            temp, spp = dijkstra(graph, i[j][0], i[j][1])
+            s += temp
         min_sums.append(s)
     
     added_dis = min(min_sums)

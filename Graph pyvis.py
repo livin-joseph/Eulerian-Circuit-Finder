@@ -23,6 +23,7 @@ for i in range(1,11):
 nx_graph.add_edges_from([(1,2,{'weight': 1}),
                          (2,3,{'weight': 2}),
                          (3,4,{'weight': 3}),
+                         (1,3,{'weight': 1}),
                          (1,4,{'weight': 4}),
                          (4,5,{'weight': 5}),
                          (5,6,{'weight': 6}),
@@ -57,7 +58,7 @@ for u, v, data in nx_graph.edges(data=True):
     print(u,v,data)
 
         # If the edge doesn't exist, add it with weight as the aggregation
-    pyvis_graph.add_edge(u, v, value=data['weight'], label=str(data['weight']),arrows = "hi",color = 'blue')
+    pyvis_graph.add_edge(u, v, value=data['weight'], label=str(data['weight']), arrows = "hi", color = 'blue')
     EDGES = pyvis_graph.get_edges()
     #print(EDGES)
 
@@ -72,15 +73,18 @@ for i in EDGES:
     adj_list[i['to']].append(i['from'])
 
 print(adj_list)
-Hierholzer.start(adj_list)
 
 n = len(VERTICES)
 adj_matrix = [[0 for _ in range(n)] for _ in range(n)]
 for i in EDGES:
     adj_matrix[i['from']-1][i['to']-1] = i['value']
     adj_matrix[i['to']-1][i['from']-1] = i['value']
-print(adj_matrix)
+
+#print(adj_matrix)
+
 Dijkstra.start(adj_matrix)
+
+sp = Hierholzer.start(adj_list,adj_matrix)
 
 
 """
@@ -122,4 +126,17 @@ pyvis_graph.show_buttons()
 #pyvis_graph.show("basic.html", notebook=False)
 pyvis_graph.write_html("basic.html", open_browser=True)
 
+
+for i in range(0,len(sp)-1):
+    EDGES = pyvis_graph.get_edges()
+    t = 0
+    for j in EDGES:
+        if j['from'] == sp[i] + 1 and j['to'] == sp[i+1] + 1:
+            t = j['value']
+        elif j['from'] == sp[i+1] + 1 and j['to'] == sp[i] + 1:
+            t = j['value']
+    pyvis_graph.add_edge(sp[i] + 1, sp[i+1] + 1,
+                         value=t, label=str(t), arrows = "hi", color = 'blue')
+
+pyvis_graph.write_html("basic_added.html", open_browser=True)
 

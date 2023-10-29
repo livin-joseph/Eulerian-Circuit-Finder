@@ -60,7 +60,21 @@ def check_euler(graph, max_node):
     path = dfs(start_node, graph, visited_edge)
     print(path)
 
+def make_euler(graph, adj_matrix):
+    odd_count = 0
+    odd_vertices = []
+    for i in graph:
+        if len(graph[i]) % 2 == 1:
+            odd_count = odd_count + 1
+            odd_vertices.append(i-1)
+    print("Odd degree vertices: ",odd_vertices)
+    import Dijkstra
+    sd, sp = Dijkstra.dijkstra(adj_matrix, odd_vertices[0], odd_vertices[1])
+    print("Shortest path between odd degree vertices: ",sp)
+    return sp
 
-def start(G):
+def start(adj_list,adj_matrix):
     max_node = 10
-    check_euler(G, max_node)
+    sp = make_euler(adj_list,adj_matrix)
+    check_euler(adj_list, max_node)
+    return sp
