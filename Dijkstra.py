@@ -13,7 +13,7 @@ def sum_edges(graph):
             w_sum += graph[i][j]
     return w_sum
 
-def dijktra(graph, source, dest):
+def dijkstra(graph, source, dest):
     shortest = [0 for i in range(len(graph))]
     selected = [source]
     l = len(graph)
@@ -34,7 +34,7 @@ def dijktra(graph, source, dest):
                 
     if(source==dest):
         return 0
-    # Dijktra's in Play
+    # dijkstra's in Play
     selected.append(ind) 
     while(ind!=dest):
         #print('ind',ind)
@@ -124,14 +124,14 @@ def Chinese_Postman(graph):
     for i in pairings_sum:
         s = 0
         for j in range(len(i)):
-            s += dijktra(graph, i[j][0], i[j][1])
+            s += dijkstra(graph, i[j][0], i[j][1])
         min_sums.append(s)
     
     added_dis = min(min_sums)
     chinese_dis = added_dis + sum_edges(graph)
     return chinese_dis
 
-
+"""
 graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0], 
          [4, 0, 8, 0, 0, 0, 0, 11, 0],
          [0, 8, 0, 7, 0, 4, 0, 0, 2], 
@@ -141,6 +141,6 @@ graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
          [0, 0, 0, 14, 0, 2, 0, 1, 6], 
          [8, 11, 0, 0, 0, 0, 1, 0, 7], 
          [0, 0, 2, 0, 0, 0, 6, 7, 0] ];
-
-
-print('Chinese Postman Distance is:',Chinese_Postman(graph))
+"""
+def start(graph):
+    print('Chinese Postman Distance is:',Chinese_Postman(graph))

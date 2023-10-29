@@ -6,8 +6,7 @@ Created on Sun Oct 29 16:12:46 2023
 """
 
 # Eulerian Path is a path in graph that visits every edge exactly once.
-# Eulerian Circuit is an Eulerian Path which starts and ends on the same
-# vertex.
+# Eulerian Circuit is an Eulerian Path which starts and ends on the same vertex.
 # time complexity is O(V+E)
 # space complexity is O(VE)
 

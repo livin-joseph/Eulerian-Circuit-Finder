@@ -21,12 +21,12 @@ for i in range(1,11):
     nx_graph.add_node(i, label=str(i))
 
 nx_graph.add_edges_from([(1,2,{'weight': 1}),
-                         (2,3,{'weight': 1}),
-                         (3,4,{'weight': 1}),
-                         (1,4,{'weight': 1}),
-                         (4,5,{'weight': 1}),
-                         (5,6,{'weight': 1}),
-                         (4,6,{'weight': 1})])
+                         (2,3,{'weight': 2}),
+                         (3,4,{'weight': 3}),
+                         (1,4,{'weight': 4}),
+                         (4,5,{'weight': 5}),
+                         (5,6,{'weight': 6}),
+                         (4,6,{'weight': 7})])
 
 pyvis_graph.add_node(1, label="1")
 pyvis_graph.add_node(2, label="2")
@@ -74,6 +74,15 @@ for i in EDGES:
 print(adj_list)
 Hierholzer.start(adj_list)
 
+n = len(VERTICES)
+adj_matrix = [[0 for _ in range(n)] for _ in range(n)]
+for i in EDGES:
+    adj_matrix[i['from']-1][i['to']-1] = i['value']
+    adj_matrix[i['to']-1][i['from']-1] = i['value']
+print(adj_matrix)
+Dijkstra.start(adj_matrix)
+
+
 """
 G1 = {
     1: [2, 3, 4],
@@ -108,9 +117,9 @@ G5 = {
 }
 """
 
-pyvis_graph.set_edge_smooth('horizontal')
+pyvis_graph.set_edge_smooth('dynamic')
 pyvis_graph.show_buttons()
-pyvis_graph.show("basic.html", notebook=False)
-#pyvis_graph.write_html("basic.html", open_browser=True)
+#pyvis_graph.show("basic.html", notebook=False)
+pyvis_graph.write_html("basic.html", open_browser=True)
 
 
