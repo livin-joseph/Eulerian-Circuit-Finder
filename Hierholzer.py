@@ -12,28 +12,28 @@ Created on Sun Oct 29 16:12:46 2023
 
 
 # using dfs for finding eulerian path traversal
-def dfs(u, graph, visited_edge, path=[]):
+def dfs(u, adj_list, visited_edge, path=[]):
     path = path + [u]
     print(path)
-    for v in graph[u]:
-        if visited_edge[u][v] == False and v not in path:
+    for v in adj_list[u]:
+        if visited_edge[u][v] == False and v not in path and len(adj_list[v]) % 2 != 1:
             visited_edge[u][v], visited_edge[v][u] = True, True
-            path = dfs(v, graph, visited_edge, path)
-    for v in graph[u]:
+            path = dfs(v, adj_list, visited_edge, path)
+    for v in adj_list[u]:
         if visited_edge[u][v] == False:
             visited_edge[u][v], visited_edge[v][u] = True, True
-            path = dfs(v, graph, visited_edge, path)
+            path = dfs(v, adj_list, visited_edge, path)
     return path
 
 
 # for checking in graph has euler path or circuit
-def check_circuit_or_path(graph, max_node):
+def check_circuit_or_path(adj_list, max_node):
     odd_degree_nodes = 0
     odd_node = -1
     for i in range(max_node):
-        if i not in graph.keys():
+        if i not in adj_list.keys():
             continue
-        if len(graph[i]) % 2 == 1:
+        if len(adj_list[i]) % 2 == 1:
             odd_degree_nodes += 1
             odd_node = i
     if odd_degree_nodes == 0:
@@ -43,10 +43,10 @@ def check_circuit_or_path(graph, max_node):
     return 3, odd_node
 
 
-def check_euler(graph, max_node):
+def check_euler(adj_list, max_node):
     #2D List to mark visited and unvisited edges
     visited_edge = [[False for _ in range(max_node + 1)] for _ in range(max_node + 1)]
-    check, odd_node = check_circuit_or_path(graph, max_node)
+    check, odd_node = check_circuit_or_path(adj_list, max_node)
     if check == 3:
         print("graph is not Eulerian")
         print("no path")
@@ -57,24 +57,28 @@ def check_euler(graph, max_node):
         print("graph has a Euler path")
     if check == 1:
         print("graph has a Euler circuit")
-    path = dfs(start_node, graph, visited_edge)
+    path = dfs(start_node, adj_list, visited_edge)
     print(path)
 
-def make_euler(graph, adj_matrix):
+def make_euler(adj_list, adj_matrix):
     odd_count = 0
     odd_vertices = []
-    for i in graph:
-        if len(graph[i]) % 2 == 1:
+    for i in adj_list:
+        if len(adj_list[i]) % 2 == 1:
             odd_count = odd_count + 1
             odd_vertices.append(i-1)
     print("Odd degree vertices: ",odd_vertices)
+    if odd_count == 0:
+        return 0, 0, 0
     import Dijkstra
-    sd, sp = Dijkstra.dijkstra(adj_matrix, odd_vertices[0], odd_vertices[1])
+    s_dist, sp = Dijkstra.dijkstra(adj_matrix, odd_vertices[0], odd_vertices[1])
+    for i in range(0,len(sp)):
+        sp[i] = sp[i] + 1
     print("Shortest path between odd degree vertices: ",sp)
-    return sp
+    return odd_count, s_dist, sp
 
 def start(adj_list,adj_matrix):
     max_node = 10
-    sp = make_euler(adj_list,adj_matrix)
+    odd_count, s_dist, sp = make_euler(adj_list,adj_matrix)
     check_euler(adj_list, max_node)
-    return sp
+    return odd_count, s_dist, sp

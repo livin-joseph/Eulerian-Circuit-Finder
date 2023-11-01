@@ -5,29 +5,29 @@ Created on Sun Oct 29 15:50:46 2023
 @author: livin
 """
 
-def sum_edges(graph):
+def sum_edges(adj_matrix):
     w_sum = 0
-    l = len(graph)
+    l = len(adj_matrix)
     for i in range(l):
         for j in range(i,l):
-            w_sum += graph[i][j]
+            w_sum += adj_matrix[i][j]
     return w_sum
 
-def dijkstra(graph, source, dest):
-    shortest = [0 for i in range(len(graph))]
+def dijkstra(adj_matrix, source, dest):
+    shortest = [0 for i in range(len(adj_matrix))]
     selected = [source]
-    l = len(graph)
+    l = len(adj_matrix)
     #Base case from source
     inf = float('inf')
     min_sel = inf
     for i in range(l):
         if(i==source):
-            shortest[source] = 0 #graph[source][source]
+            shortest[source] = 0 #adj_matrix[source][source]
         else:
-            if(graph[source][i]==0):
+            if(adj_matrix[source][i]==0):
                 shortest[i] = inf
             else:
-                shortest[i] = graph[source][i]
+                shortest[i] = adj_matrix[source][i]
                 if(shortest[i] < min_sel):
                     min_sel = shortest[i]
                     ind = i
@@ -40,10 +40,10 @@ def dijkstra(graph, source, dest):
         #print('ind',ind)
         for i in range(l):
             if i not in selected:
-                if(graph[ind][i]!=0):
+                if(adj_matrix[ind][i]!=0):
                     #Check if distance needs to be updated
-                    if((graph[ind][i] + min_sel) < shortest[i]):
-                        shortest[i] = graph[ind][i] + min_sel
+                    if((adj_matrix[ind][i] + min_sel) < shortest[i]):
+                        shortest[i] = adj_matrix[ind][i] + min_sel
         temp_min = float('inf')
         #print('shortest:',shortest)
         #print('selected:',selected)
@@ -60,7 +60,7 @@ def dijkstra(graph, source, dest):
     while path[-1] != source:
         current_node = path[-1]
         for i in range(l):
-            if graph[current_node][i] != 0 and shortest[current_node] - graph[current_node][i] == shortest[i]:
+            if adj_matrix[current_node][i] != 0 and shortest[current_node] - adj_matrix[current_node][i] == shortest[i]:
                 path.append(i)
                 break
     
@@ -68,11 +68,11 @@ def dijkstra(graph, source, dest):
                             
 #Finding odd degree vertices in graph
 
-def get_odd(graph):
-    degrees = [0 for i in range(len(graph))]
-    for i in range(len(graph)):
-        for j in range(len(graph)):
-                if(graph[i][j]!=0):
+def get_odd(adj_matrix):
+    degrees = [0 for i in range(len(adj_matrix))]
+    for i in range(len(adj_matrix)):
+        for j in range(len(adj_matrix)):
+                if(adj_matrix[i][j]!=0):
                     degrees[i]+=1
                 
     #print(degrees)
@@ -94,10 +94,10 @@ def gen_pairs(odds):
 
 
 #Final Compiled Function
-def Chinese_Postman(graph):
-    odds = get_odd(graph)
+def Chinese_Postman(adj_matrix):
+    odds = get_odd(adj_matrix)
     if(len(odds)==0):
-        return sum_edges(graph)
+        return sum_edges(adj_matrix)
     pairs = gen_pairs(odds)
     l = (len(pairs)+1)//2
     
@@ -132,16 +132,16 @@ def Chinese_Postman(graph):
     for i in pairings_sum:
         s = 0
         for j in range(len(i)):
-            temp, spp = dijkstra(graph, i[j][0], i[j][1])
+            temp, spp = dijkstra(adj_matrix, i[j][0], i[j][1])
             s += temp
         min_sums.append(s)
     
     added_dis = min(min_sums)
-    chinese_dis = added_dis + sum_edges(graph)
+    chinese_dis = added_dis + sum_edges(adj_matrix)
     return chinese_dis
 
 """
-graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0], 
+adj_matrix = [[0, 4, 0, 0, 0, 0, 0, 8, 0], 
          [4, 0, 8, 0, 0, 0, 0, 11, 0],
          [0, 8, 0, 7, 0, 4, 0, 0, 2], 
          [0, 0, 7, 0, 9, 14, 0, 0, 0], 
@@ -151,5 +151,5 @@ graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
          [8, 11, 0, 0, 0, 0, 1, 0, 7], 
          [0, 0, 2, 0, 0, 0, 6, 7, 0] ];
 """
-def start(graph):
-    print('Chinese Postman Distance is:',Chinese_Postman(graph))
+def start(adj_matrix):
+    print('Chinese Postman Distance is:',Chinese_Postman(adj_matrix))
